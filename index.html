@@ -354,7 +354,7 @@ function computeLayout(st){
   room('현관', xEnt, zLiv + 0.05, 0.10, zLiv + 1.65, TILE, 0.42);
   room('현관창고', xEnt, zLiv + 1.80, 1.60, zN, TILE, 0.42);
   room('케어룸', 0.20, zLiv + 0.15, 1.60, zLiv + 1.65, CAREFLOOR, 0.40);   // 펜트리 자리 → 케어룸
-  room('욕실1', 1.70, zLiv + 0.15, 3.70, zLiv + 1.65, TILE, 0.44); // 공용욕실(그대로)
+  room('욕실1', 1.70, zLiv + 0.15, 3.70, zLiv + 1.65, '#cbc7bb', 0.44); // 공용욕실(그대로)
   room('욕실2', xEast - 2.85, zLiv + 0.15, xEast - 1.55, zLiv + 1.60, TILE, 0.44);
   room('파우더룸', xEast - 1.45, zLiv + 0.20, xEast - 0.25, zLiv + 1.05, TILE, 0.40);
   room('드레스룸', xEast - 1.45, zLiv + 1.15, xEast, zN, TILE, 0.44);
@@ -365,17 +365,17 @@ function computeLayout(st){
   var b1X0 = 1.70, b1X1 = 3.70, b1Z0 = zLiv + 0.15, b1Z1 = zLiv + 1.65;
   // 욕조 (동쪽 벽면에 세로로) — 림 + 내부 홈
   out.items.push({kind:'bathtub', x0:b1X1 - 0.65, x1:b1X1 - 0.02, z0:b1Z0 + 0.08, z1:b1Z1 - 0.08,
-                  y0:0, y1:0.55, color:'#f4f3ef'});
+                  y0:0, y1:0.55, color:'#f1eee7'});
   out.items.push({kind:'tubInner', x0:b1X1 - 0.59, x1:b1X1 - 0.08, z0:b1Z0 + 0.16, z1:b1Z1 - 0.16,
-                  y0:0.16, y1:0.47, color:'#e4e9ea'});
+                  y0:0.16, y1:0.47, color:'#bed0d5'});
   // 양변기 (북쪽 벽, 남쪽으로 앉는 방향)
   out.items.push({kind:'toiletTank', x0:b1X0 + 0.25, x1:b1X0 + 0.65, z0:b1Z1 - 0.21, z1:b1Z1 - 0.04,
-                  y0:0, y1:0.74, color:'#fbfbf9'});
+                  y0:0, y1:0.74, color:'#ffffff'});
   out.items.push({kind:'toiletBowl', x0:b1X0 + 0.29, x1:b1X0 + 0.61, z0:b1Z1 - 0.62, z1:b1Z1 - 0.18,
-                  y0:0, y1:0.40, color:'#fdfdfb'});
+                  y0:0, y1:0.40, color:'#ffffff'});
   // 세면대 (서쪽 벽면) + 거울
   out.items.push({kind:'vanity', x0:b1X0 + 0.03, x1:b1X0 + 0.40, z0:b1Z0 + 0.15, z1:b1Z0 + 0.75,
-                  y0:0.58, y1:0.83, color:'#efece4'});
+                  y0:0.58, y1:0.83, color:'#e2dccd'});
   out.items.push({kind:'basin', x0:b1X0 + 0.06, x1:b1X0 + 0.37, z0:b1Z0 + 0.20, z1:b1Z0 + 0.70,
                   y0:0.83, y1:0.88, color:'#ffffff'});
   out.items.push({kind:'mirror', x0:b1X0 + 0.01, x1:b1X0 + 0.03, z0:b1Z0 + 0.20, z1:b1Z0 + 0.72,
@@ -975,7 +975,7 @@ function rebuild(){
       tex.repeat.set(-S * Wp / 748, S * Hp / 536);
       tex.offset.set((105 + S * (layout.xEast - PX0)) / 748, 1 - (493 - S * PZ0) / 536);
       var g = new THREE.PlaneGeometry(Wp, Hp);
-      var m = new THREE.MeshBasicMaterial({map:tex, transparent:true, opacity:0.55, side:THREE.DoubleSide});
+      var m = new THREE.MeshBasicMaterial({map:tex, transparent:true, opacity:0.72, side:THREE.DoubleSide});
       planMesh = new THREE.Mesh(g, m);
       planMesh.rotation.x = Math.PI / 2;
       planMesh.position.set((PX0 + PX1) / 2, 0.03, (PZ0 + PZ1) / 2);
