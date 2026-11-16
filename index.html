@@ -345,6 +345,7 @@ function computeLayout(st){
   room('발코니1', xEast - BASE.bed1W + 0.10, 0, xEast - 1.55, BASE.bed1z0 - 0.05, BALC, 0.44);
   room('대피공간', xEast - 1.45, 0, xEast, BASE.bed1z0 - 0.05, BALC, 0.44);
   room('주방/식당 (확장)', xLiv0 - 1.00, zLiv + 0.05, xEast - 3.45, zN, WOOD, 0.52);  // 주방확장: 알파룸 통합
+  out.labels[out.labels.length - 1].z = zLiv + 0.62;   // 라벨이 아일랜드를 가리지 않게 남쪽으로
   room('현관', 0, zLiv + 0.05, 1.65, zLiv + 1.65, TILE, 0.46);
   room('현관창고', 0, zLiv + 1.80, 1.70, zN, TILE, 0.44);
   room('팬트리', 1.75, zLiv + 0.15, 2.70, zLiv + 1.65, TILE, 0.44);
@@ -516,16 +517,16 @@ function computeLayout(st){
   var islCx = kx1 - 0.70 - islW / 2;
   var islCz = zN - 1.25;
   out.items.push({kind:'island', x0:islCx - islW / 2, x1:islCx + islW / 2,
-                  z0:islCz - islD / 2, z1:islCz + islD / 2, y0:0, y1:islH, color:'#bcb09c'});
+                  z0:islCz - islD / 2, z1:islCz + islD / 2, y0:0, y1:islH, color:'#b3a68f'});
   out.items.push({kind:'islandTop', x0:islCx - islW / 2 - 0.04, x1:islCx + islW / 2 + 0.04,
                   z0:islCz - islD / 2 - 0.04, z1:islCz + islD / 2 + 0.04,
-                  y0:islH, y1:islH + 0.05, color:'#e2dccf'});
+                  y0:islH, y1:islH + 0.05, color:'#eee9dd'});
   // 주방 상·하부장 (더샵 84A 견본세대 배색: 상부장 화이트 / 하부장 샌드그레이 / 상판 엔지니어드스톤)
   var kcX = kx0 - 0.03;
   out.items.push({kind:'cabinetBase', x0:kcX, x1:kcX + 0.58, z0:zLiv + 0.40, z1:zN - 0.18,
-                  y0:0, y1:0.86, color:'#b8ab96'});
+                  y0:0, y1:0.86, color:'#b0a390'});
   out.items.push({kind:'cabinetTop', x0:kcX - 0.02, x1:kcX + 0.62, z0:zLiv + 0.36, z1:zN - 0.14,
-                  y0:0.86, y1:0.90, color:'#e8e3d8'});
+                  y0:0.86, y1:0.90, color:'#eeeade'});
   out.items.push({kind:'cabinetUpper', x0:kcX, x1:kcX + 0.34, z0:zLiv + 0.44, z1:zN - 0.24,
                   y0:1.50, y1:2.28, color:'#f6f4ef'});
   if (s.dining){
@@ -602,14 +603,14 @@ function makeFloorTex(){
   if (floorTexBase) return floorTexBase;
   var cv = document.createElement('canvas'); cv.width = 512; cv.height = 512;
   var c = cv.getContext('2d');
-  c.fillStyle = '#cabb9f'; c.fillRect(0, 0, 512, 512);
+  c.fillStyle = '#d0c2a6'; c.fillRect(0, 0, 512, 512);
   // Life Oak 강마루: 1.2m × 0.19m 플랭크
   var rows = 4, h = 512 / rows;
   for (var r = 0; r < rows; r++){
     var off = (r % 2) * 128;
     for (var k = -1; k < 3; k++){
       var x = k * 256 + off, y = r * h;
-      c.fillStyle = (r + k) % 3 === 0 ? '#c5b597' : ((r + k) % 3 === 1 ? '#d3c5a9' : '#cabb9f');
+      c.fillStyle = (r + k) % 3 === 0 ? '#cabb9f' : ((r + k) % 3 === 1 ? '#d9cdb3' : '#d0c2a6');
       c.fillRect(x + 1, y + 1, 254, h - 2);
       c.strokeStyle = 'rgba(150,135,110,0.65)'; c.lineWidth = 1;
       c.strokeRect(x + 0.5, y + 0.5, 255, h - 1);
