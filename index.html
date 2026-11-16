@@ -967,6 +967,10 @@ function applyCamera(){
 function setView(kind, L){
   L = L || layout;
   var cx = L.xEast / 2, cz = L.zN / 2;
+  // 소파(1인칭) 시점에서는 라벨·치수선이 화면을 가리므로 잠시 숨긴다
+  var hide2d = (kind === 'sofa');
+  if (labelSpriteGroup) labelSpriteGroup.visible = !hide2d;
+  if (dimGroup) dimGroup.visible = !hide2d;
   if (kind === 'all'){
     camState.target = {x:cx, y:0.85, z:cz};
     camState.theta = 0.62; camState.phi = 0.88; camState.radius = 16.5;
