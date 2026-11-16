@@ -177,9 +177,10 @@
       · 천장고 2.40 m (기본값, 슬라이더로 실측 입력)<br><br>
       <b>짠부 님 세대 반영 (2026-11-16)</b><br>
       · 좌우 반전: 침실1·발코니1·드레스룸·다용도실이 왼쪽, 현관·케어룸(펜트리 자리)·욕실1·침실2·침실3이 오른쪽<br>
+      · 서쪽 현관 블록은 침실 블록보다 약 0.95 m 서쪽으로 돌출(분양 평면도 그대로), 복도가 현관 앞까지 이어짐<br>
       · 주방확장: 알파룸↔주방/식당 경계 벽 제거 → '주방/식당 (확장)' 하나로 통합. 북쪽 창가 벽에 싱크볼·개수대, 동쪽(다용도실·욕실2와 맞닿은) 벽에 냉장고장·키큰장, 알파룸 자리에 아일랜드·식탁<br>
-      · 공용욕실(욕실1)은 그대로: 욕조·양변기·세면대 구성 (펜트리와 바꿔 부르지 않도록 정정)<br>
-      · 케어룸은 현관 옆 펜트리 자리(약 0.9×1.5 m): 낮은 세척 볼·케어 벤치·수납 선반·안전손잡이 구성<br><br>
+      · 공용욕실(욕실1)은 그대로: 약 2.0×1.5 m, 욕조·양변기·세면대 구성<br>
+      · 케어룸은 현관 옆 펜트리 자리(약 1.4×1.5 m): 낮은 세척 볼·케어 벤치·수납 선반·안전손잡이 구성<br><br>
       <b>마감재·색감 (더샵 84A 견본세대 기준, 2026-11-16 반영)</b><br>
       · 마루: 강마루 'Life Oak'(사트데코 14-10946-118) / 아트월: 동평 YF272891 400×800 라임스톤 타일<br>
       · 주방: 상부장 화이트 · 하부장 샌드그레이 · 상판 엔지니어드스톤(RU608 소피아) · 거실 LED 50W×3 + 간접조명 톤<br>
@@ -326,9 +327,11 @@ function computeLayout(st){
   var xEast = xArt + T + BASE.bed1W;          // 동쪽 외벽 안쪽면
   var zLiv  = s.livingD;
   var zN    = zLiv + BASE.northDepth;         // 북쪽 외벽 안쪽면
+  var xEnt  = -0.95;                          // 현관 블록은 남쪽 침실 블록보다 서쪽으로 돌출 (분양 평면도)
   var zB    = BASE.bedDepth;
 
   var out = {H:H, T:T, E:E, xLiv0:xLiv0, xArt:xArt, xEast:xEast, zLiv:zLiv, zN:zN, zB:zB,
+             entBay:(0 - xEnt),   // 현관 돌출 깊이
              rooms:[], walls:[], glass:[], items:[], labels:[], dims:[], mats:[], screen:null};
   out.walls.glass = out.glass;
 
@@ -348,18 +351,18 @@ function computeLayout(st){
   room('주방/식당 (확장)', xLiv0 - 1.00, zLiv + 0.05, xEast - 3.45, zN, WOOD, 0.52);  // 주방확장: 알파룸 통합
   out.labels[out.labels.length - 1].z = zLiv + 1.55;   // 라벨이 조리대·식탁을 가리지 않게
   room('', xEast - 3.45, zLiv + 0.05, xEast - 2.90, zLiv + 1.70, WOOD);   // 냉장고장 앞 확장 바닥
-  room('현관', 0, zLiv + 0.05, 1.40, zLiv + 1.65, TILE, 0.44);
-  room('현관창고', 0, zLiv + 1.80, 1.70, zN, TILE, 0.44);
-  room('케어룸', 1.50, zLiv + 0.15, 2.40, zLiv + 1.65, CAREFLOOR, 0.38);   // 펜트리 자리 → 케어룸
-  room('욕실1', 2.50, zLiv + 0.15, xLiv0 - 1.10, zLiv + 1.65, TILE, 0.42); // 공용욕실(그대로)
+  room('현관', xEnt, zLiv + 0.05, 0.10, zLiv + 1.65, TILE, 0.42);
+  room('현관창고', xEnt, zLiv + 1.80, 1.60, zN, TILE, 0.42);
+  room('케어룸', 0.20, zLiv + 0.15, 1.60, zLiv + 1.65, CAREFLOOR, 0.40);   // 펜트리 자리 → 케어룸
+  room('욕실1', 1.70, zLiv + 0.15, 3.70, zLiv + 1.65, TILE, 0.44); // 공용욕실(그대로)
   room('욕실2', xEast - 2.85, zLiv + 0.15, xEast - 1.55, zLiv + 1.60, TILE, 0.44);
   room('파우더룸', xEast - 1.45, zLiv + 0.20, xEast - 0.25, zLiv + 1.05, TILE, 0.40);
   room('드레스룸', xEast - 1.45, zLiv + 1.15, xEast, zN, TILE, 0.44);
   room('다용도실', xEast - 3.35, zLiv + 1.95, xEast - 1.55, zN, TILE, 0.42);
-  room('', 0.10, zB + 0.05, xLiv0, zLiv - 0.02, WOOD);
+  room('', xEnt, zB + 0.05, xLiv0, zLiv - 0.02, WOOD);
 
   /* ---- 공용욕실(욕실1): 욕조 · 양변기 · 세면대 ---- */
-  var b1X0 = 2.50, b1X1 = xLiv0 - 1.10, b1Z0 = zLiv + 0.15, b1Z1 = zLiv + 1.65;
+  var b1X0 = 1.70, b1X1 = 3.70, b1Z0 = zLiv + 0.15, b1Z1 = zLiv + 1.65;
   // 욕조 (동쪽 벽면에 세로로) — 림 + 내부 홈
   out.items.push({kind:'bathtub', x0:b1X1 - 0.65, x1:b1X1 - 0.02, z0:b1Z0 + 0.08, z1:b1Z1 - 0.08,
                   y0:0, y1:0.55, color:'#f4f3ef'});
@@ -382,7 +385,7 @@ function computeLayout(st){
                   y0:1.05, y1:2.02, color:'#bcc3c5'});
 
   /* ---- 케어룸 (현관 옆 펜트리 자리): 세척 볼 · 케어 벤치 · 수납 ---- */
-  var crX0 = 1.50, crX1 = 2.40, crZ0 = zLiv + 0.15, crZ1 = zLiv + 1.65;
+  var crX0 = 0.20, crX1 = 1.60, crZ0 = zLiv + 0.15, crZ1 = zLiv + 1.65;
   out.items.push({kind:'careBench', x0:crX0 + 0.03, x1:crX0 + 0.43, z0:crZ1 - 0.64, z1:crZ1 - 0.06,
                   y0:0.40, y1:0.46, color:'#eceeed'});                              // 케어 벤치(서쪽)
   out.items.push({kind:'careBasin', x0:crX1 - 0.44, x1:crX1 - 0.03, z0:crZ1 - 0.58, z1:crZ1 - 0.06,
@@ -410,22 +413,25 @@ function computeLayout(st){
 
   /* ---- 벽 ---- */
   buildWall(out.walls, 0, -E, xEast + E, E, H, true, '#eae4d7', sWin);        // 남 외벽
-  buildWall(out.walls, zN, -E, xEast + E, E, H, true, '#eae4d7', nWin);       // 북 외벽
-  buildWall(out.walls, 0, -E, zN + E, E, H, false, '#eae4d7', [[zLiv + 0.55, zLiv + 1.45, 0, 2.10]]); // 서 외벽(현관 도어)
+  buildWall(out.walls, zN, xEnt - E, xEast + E, E, H, true, '#eae4d7', nWin); // 북 외벽
+  buildWall(out.walls, 0, -E, zB, E, H, false, '#eae4d7', []);               // 서 외벽(침실 구간)
+  buildWall(out.walls, xEnt, zB, zN + E, E, H, false, '#eae4d7',
+    [[zLiv + 0.55, zLiv + 1.45, 0, 2.10]]);                                   // 서 외벽(현관 도어·돌출부)
   buildWall(out.walls, xEast, -E, zN + E, E, H, false, '#eae4d7', []);        // 동 외벽
   buildWall(out.walls, BASE.xBed2 + T/2, -0.02, zB, T, H, false, '#ede8dd', []);      // 침실2|침실3
   buildWall(out.walls, BASE.xBed3b + T/2, -0.02, zB, T, H, false, '#ede8dd', []);     // 침실3|거실 (소파월)
   buildWall(out.walls, xArt + T/2, -0.02, Math.max(zLiv, BASE.bed1z1), T, H, false, '#ede8dd', []); // 아트월
-  buildWall(out.walls, zB, 0, BASE.xBed3b + T, T, H, true, '#ede8dd',
+  buildWall(out.walls, zB, xEnt, BASE.xBed3b + T, T, H, true, '#ede8dd',
     [[1.75, 2.55, 0, 2.05], [4.10, 4.90, 0, 2.05]]);                          // 침실2·3 북벽(문)
   buildWall(out.walls, BASE.bed1z1, xArt + T, xEast, T, H, true, '#ede8dd', [[xEast - 1.35, xEast - 0.55, 0, 2.05]]); // 침실1 북벽
-  buildWall(out.walls, 1.40, zLiv, zLiv + 1.65, T, H, false, '#ede8dd', []);   // 현관|케어룸
-  buildWall(out.walls, 1.70, zLiv + 1.65, zN, T, H, false, '#ede8dd', []);      // 현관창고 동벽
-  buildWall(out.walls, 2.45, zLiv + 0.10, zLiv + 1.65, T, H, false, '#ede8dd', []); // 케어룸|욕실1
-  buildWall(out.walls, zLiv + 1.65, 0, xLiv0 - 1.05, T, H, true, '#ede8dd',
-    [[0.55, 1.35, 0, 2.05]]);                                                  // 현관·현관창고/케어룸·욕실1 북벽(창고 문)
-  buildWall(out.walls, zLiv + 0.15, 1.40, xLiv0 - 1.05, T, H, true, '#ede8dd',
-    [[1.60, 2.30, 0, 2.05], [2.60, 3.35, 0, 2.05]]);                           // 케어룸·욕실1 남벽(문 2개)
+  buildWall(out.walls, 0.15, zLiv, zLiv + 1.65, T, H, false, '#ede8dd', []);   // 현관|케어룸
+  buildWall(out.walls, 1.65, zLiv + 1.65, zN, T, H, false, '#ede8dd', []);     // 현관창고 동벽
+  buildWall(out.walls, 1.65, zLiv + 0.10, zLiv + 1.65, T, H, false, '#ede8dd', []); // 케어룸|욕실1
+  buildWall(out.walls, 3.92, zLiv + 0.10, zLiv + 1.65, 0.40, H, false, '#ece7db', []); // 욕실1|주방 덕트벽
+  buildWall(out.walls, zLiv + 1.65, xEnt, xLiv0 - 1.05, T, H, true, '#ede8dd',
+    [[xEnt + 0.20, xEnt + 0.90, 0, 2.05]]);                                                  // 현관·현관창고/케어룸·욕실1 북벽(창고 문)
+  buildWall(out.walls, zLiv + 0.15, 0.20, xLiv0 - 1.05, T, H, true, '#ede8dd',
+    [[0.60, 1.35, 0, 2.05], [2.20, 2.95, 0, 2.05]]);                           // 케어룸·욕실1 남벽(문 2개)
   buildWall(out.walls, xLiv0 - 1.05, zLiv + 0.10, zN, T, H, false, '#ede8dd', []);  // 알파룸 서벽
   // (주방확장) 알파룸↔주방/식당 경계 벽 제거 — 짠부 님 세대는 주방확장 시공
   buildWall(out.walls, zLiv + 1.70, xEast - 2.90, xEast - 0.20, T, H, true, '#ede8dd',
@@ -961,14 +967,18 @@ function rebuild(){
     loader.load(planSrc, function(tex){
       if ('colorSpace' in tex && THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
       tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-      var rx = (734 - 44) / 748, ry = (515 - 100) / 536;
-      tex.repeat.set(-rx, ry);                 // 세대 좌우 반전 → 평면도 이미지도 좌우로 뒤집기
-      tex.offset.set(44 / 748 + rx, 1 - 515 / 536);
-      var g = new THREE.PlaneGeometry(layout.xEast + 2 * layout.E, layout.zN + 2 * layout.E);
+      // 평면도 실제 축척(안쪽 가로 609px = 거실+침실 폭)에 맞춘 균등 배율 + 좌우 반전
+      var S = 609 / layout.xEast;                        // px/m
+      var PX0 = -layout.E, PX1 = layout.xEast + (layout.entBay || 0) + layout.E;
+      var PZ0 = -layout.E, PZ1 = layout.zN + layout.E;
+      var Wp = PX1 - PX0, Hp = PZ1 - PZ0;
+      tex.repeat.set(-S * Wp / 748, S * Hp / 536);
+      tex.offset.set((105 + S * (layout.xEast - PX0)) / 748, 1 - (493 - S * PZ0) / 536);
+      var g = new THREE.PlaneGeometry(Wp, Hp);
       var m = new THREE.MeshBasicMaterial({map:tex, transparent:true, opacity:0.55, side:THREE.DoubleSide});
       planMesh = new THREE.Mesh(g, m);
       planMesh.rotation.x = Math.PI / 2;
-      planMesh.position.set(layout.xEast / 2, 0.03, layout.zN / 2);
+      planMesh.position.set((PX0 + PX1) / 2, 0.03, (PZ0 + PZ1) / 2);
       root.add(planMesh);
     }, undefined, function(){ /* 이미지 없으면 조용히 무시 */ });
   }
