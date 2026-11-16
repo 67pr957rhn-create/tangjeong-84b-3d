@@ -178,7 +178,9 @@
       <b>짠부 님 세대 반영 (2026-11-16)</b><br>
       · 좌우 반전: 침실1·발코니1·드레스룸·다용도실이 왼쪽, 현관·케어룸(펜트리 자리)·욕실1·침실2·침실3이 오른쪽<br>
       · 서쪽 현관 블록은 침실 블록보다 약 0.95 m 서쪽으로 돌출(분양 평면도 그대로), 복도가 현관 앞까지 이어짐<br>
-      · 주방확장: 알파룸↔주방/식당 경계 벽 제거 → '주방/식당 (확장)' 하나로 통합. 북쪽 창가 벽에 싱크볼·개수대, 동쪽(다용도실·욕실2와 맞닿은) 벽에 냉장고장·키큰장, 알파룸 자리에 아일랜드·식탁<br>
+      · 주방확장: 알파룸↔주방/식당 경계 벽 제거 → '주방/식당 (확장)' 하나로 통합. 북쪽 창가 벽에 싱크볼·개수대, 동쪽(다용도실·욕실2와 맞닿은) 벽에 냉장고장·키큰장<br>
+      · <b>T자형 주방 아일랜드</b>(프리미엄 키친): 북쪽 창가 메인 상판 앞면에 직교로 맞붙어 거실/식당 쪽으로 뻗는 아일랜드(0.95 × 1.67 m) + 그 위 인덕션·디자인후드. 식탁은 아일랜드와 나란히 서쪽에 붙임<br>
+      · <b>침실1(안방) 출입구</b>: 거실 아트월 북쪽 끝·욕실2 남벽 바로 아래에 폭 0.75 m 문(문틀·열린 문짝·문턱). 분양 평면도와 같은 위치<br>
       · 공용욕실(욕실1)은 그대로: 약 2.0×1.5 m, 욕조·양변기·세면대 구성<br>
       · 케어룸은 현관 옆 펜트리 자리(약 1.4×1.5 m): 낮은 세척 볼·케어 벤치·수납 선반·안전손잡이 구성<br><br>
       <b>마감재·색감 (더샵 84A 견본세대 기준, 2026-11-16 반영)</b><br>
@@ -277,6 +279,7 @@ function buildWall(list, fixed, a0, a1, t, h, horizontal, color, windows){
     w = wins[i];
     a = clamp(w[0], a0, a1); b = clamp(w[1], a0, a1);
     if (b - a < 0.15) continue;
+    if (w.length > 4 && w[4] === 'nog') continue;   // 문 전용 개구부: 유리 없이 뚫기만
     if (horizontal){
       list.glass.push({x0:a, x1:b, z0:fixed - 0.02, z1:fixed + 0.02, y0:w[2], y1:w[3]});
     } else {
@@ -350,6 +353,8 @@ function computeLayout(st){
   room('대피공간', xEast - 1.45, 0, xEast, BASE.bed1z0 - 0.05, BALC, 0.44);
   room('주방/식당 (확장)', xLiv0 - 1.00, zLiv + 0.05, xEast - 3.45, zN, WOOD, 0.52);  // 주방확장: 알파룸 통합
   out.labels[out.labels.length - 1].z = zLiv + 1.55;   // 라벨이 조리대·식탁을 가리지 않게
+  out.labels[out.labels.length - 1].x = xEast - 4.95;  // T자 아일랜드를 가리지 않게 서쪽(식탁 쪽)으로
+  out.labels[out.labels.length - 1].size = 0.46;
   room('', xEast - 3.45, zLiv + 0.05, xEast - 2.90, zLiv + 1.70, WOOD);   // 냉장고장 앞 확장 바닥
   room('현관', xEnt, zLiv + 0.05, 0.10, zLiv + 1.65, TILE, 0.42);
   room('현관창고', xEnt, zLiv + 1.80, 1.60, zN, TILE, 0.42);
@@ -423,7 +428,9 @@ function computeLayout(st){
   buildWall(out.walls, xEast, -E, zN + E, E, H, false, '#eae4d7', []);        // 동 외벽
   buildWall(out.walls, BASE.xBed2 + T/2, -0.02, zB, T, H, false, '#ede8dd', []);      // 침실2|침실3
   buildWall(out.walls, BASE.xBed3b + T/2, -0.02, zB, T, H, false, '#ede8dd', []);     // 침실3|거실 (소파월)
-  buildWall(out.walls, xArt + T/2, -0.02, Math.max(zLiv, BASE.bed1z1), T, H, false, '#ede8dd', []); // 아트월
+  // 아트월 — 북쪽 끝(욕실2 남벽 바로 아래)에 침실1(안방) 출입구를 뚫는다 (분양 평면도 위치)
+  buildWall(out.walls, xArt + T/2, -0.02, Math.max(zLiv, BASE.bed1z1), T, H, false, '#ede8dd',
+    [[3.15, 3.90, 0, 2.05, 'nog']]);                                           // 안방 출입구(폭 0.75 m)
   buildWall(out.walls, zB, xEnt, BASE.xBed3b + T, T, H, true, '#ede8dd',
     [[1.75, 2.55, 0, 2.05], [4.10, 4.90, 0, 2.05]]);                          // 침실2·3 북벽(문)
   buildWall(out.walls, BASE.bed1z1, xArt + T, xEast, T, H, true, '#ede8dd', [[xEast - 1.35, xEast - 0.55, 0, 2.05]]); // 침실1 북벽
@@ -444,7 +451,9 @@ function computeLayout(st){
   buildWall(out.walls, zLiv + 1.90, xEast - 3.40, xEast - 1.55, T, H, true, '#ede8dd', []); // 다용도실 남벽
 
   /* ---- 아트월 타일 마감(내부면) ---- */
-  out.walls.push({x0:xArt - 0.03, x1:xArt, z0:0.02, z1:zLiv, y0:0, y1:H, color:'#c9c3b6', kind:'artTile'});
+  out.walls.push({x0:xArt - 0.03, x1:xArt, z0:0.02, z1:3.15, y0:0, y1:H, color:'#c9c3b6', kind:'artTile'});   // 안방 문 남쪽
+  out.walls.push({x0:xArt - 0.03, x1:xArt, z0:3.90, z1:zLiv, y0:0, y1:H, color:'#c9c3b6', kind:'artTile'});   // 안방 문 북쪽
+  out.walls.push({x0:xArt - 0.03, x1:xArt, z0:3.15, z1:3.90, y0:2.05, y1:H, color:'#c9c3b6', kind:'artTile'}); // 문 위 헤더
   // 아트월: 동평 YF272891(400×800) 라임스톤 톤 타일
   out.walls.push({x0:xLiv0, x1:xLiv0 + 0.03, z0:0.02, z1:zLiv, y0:0, y1:H, color:'#efece4', kind:'sofaWall'});
 
@@ -567,13 +576,9 @@ function computeLayout(st){
                   y0:CT - 0.16, y1:CT + 0.005, color:'#c9d1d2'});
   out.items.push({kind:'faucet', x0:7.70, x1:7.74, z0:kzN - 0.13, z1:kzN - 0.09,
                   y0:CT, y1:CT + 0.29, color:'#b7bec0'});
-  // 인덕션 (두 창 사이 벽기둥 아래) + 상부장·후드
-  out.items.push({kind:'cooktop', x0:6.34, x1:6.96, z0:kzN - 0.57, z1:kzN - 0.13,
-                  y0:CT, y1:CT + 0.012, color:'#2c2f34'});
-  out.items.push({kind:'hood', x0:6.28, x1:7.04, z0:kzN - 0.52, z1:kzN - 0.04,
-                  y0:1.46, y1:1.58, color:'#dbdede'});
+  // 상부장(화이트) — 인덕션은 T자 아일랜드로 옮겨 벽에는 상부장만
   out.items.push({kind:'cabinetUpper', x0:6.20, x1:7.12, z0:kzN - 0.38, z1:kzN - 0.03,
-                  y0:1.70, y1:2.28, color:'#f7f5f0'});                          // 상부장(화이트)
+                  y0:1.70, y1:2.28, color:'#f7f5f0'});
 
   // 동쪽 벽: 냉장고장 + 키큰장 (다용도실·욕실2와 맞닿은 면)
   out.items.push({kind:'fridge', x0:kx1 - 0.10, x1:kx1 + 0.48, z0:zLiv + 0.29, z1:zLiv + 1.21,
@@ -581,23 +586,50 @@ function computeLayout(st){
   out.items.push({kind:'tallCabinet', x0:kx1 - 0.10, x1:kx1 + 0.48, z0:zLiv + 1.25, z1:zLiv + 1.83,
                   y0:0, y1:2.24, color:'#cbc2b0'});
 
-  // 아일랜드 (조리대 앞)
-  var islX0 = 6.98, islX1 = 8.78, islZ0 = 4.88, islZ1 = 5.68, islH = 0.88;
+  /* ---- T자형 주방 아일랜드 (프리미엄 키친 T자형 · 대면형) ----
+     북쪽 창가 메인 상판(수전·개수대 라인) 앞면에 직교로 맞붙어 거실/식당 방향(남쪽)으로
+     뻗는 stem 하나. 위에서 보면 메인 상판 + stem 이 'T'자로 이어진다.
+     인덕션·디자인후드는 stem 위에 올린다(대면형). 냉장고장·키큰장은 그대로. */
+  var F = function(x){ return xEast - x; };      // 반전 후(표시) x → 모델 x
+  var islX0 = F(7.40), islX1 = F(6.45);          // 반전 후 6.45 ~ 7.40 (폭 0.95 m)
+  var islZ0 = 4.75, islZ1 = kzN - CD - 0.01;     // 4.75 ~ 6.42 : 메인 상판 앞면에 맞붙음
+  var islH = CT;                                  // 메인 상판과 같은 높이 → 한 덩어리 T
   out.items.push({kind:'island', x0:islX0, x1:islX1, z0:islZ0, z1:islZ1, y0:0, y1:islH - 0.04, color:'#c8bca6'});
-  out.items.push({kind:'islandTop', x0:islX0 - 0.04, x1:islX1 + 0.04, z0:islZ0 - 0.04, z1:islZ1 + 0.04,
+  out.items.push({kind:'islandTop', x0:islX0 - 0.03, x1:islX1 + 0.03, z0:islZ0 - 0.03, z1:islZ1 + 0.05,
                   y0:islH - 0.04, y1:islH + 0.02, color:'#efeae0'});
+  // 아일랜드 인덕션 · 디자인후드 · 후드 덕트
+  var icx = F(6.925), icz = 5.55;
+  out.items.push({kind:'cooktop', x0:icx - 0.30, x1:icx + 0.30, z0:icz - 0.26, z1:icz + 0.26,
+                  y0:islH + 0.02, y1:islH + 0.034, color:'#2c2f34'});
+  out.items.push({kind:'hood', x0:F(7.28), x1:F(6.57), z0:icz - 0.23, z1:icz + 0.23,
+                  y0:1.52, y1:1.66, color:'#d9dcdc'});
+  out.items.push({kind:'hoodDuct', x0:F(7.03), x1:F(6.82), z0:icz - 0.11, z1:icz + 0.11,
+                  y0:1.66, y1:H, color:'#cfd3d3'});
+  out.labels.push({x:F(6.92), z:4.42, text:'T자 아일랜드', size:0.34});
 
-  // 식탁 — 알파룸을 터서 생긴 자리 (욕실1·케어룸 벽 앞)
+  // 식탁 — T자 아일랜드와 나란히(남북 방향) 서쪽에 붙여, 아일랜드 쪽에 앉으면 마주 보는 대면형
   if (s.dining){
-    var dx = kx0 + 1.30;
-    var dz = zLiv + 1.00;
-    out.items.push({kind:'table', cx:dx, cz:dz, rotY:0, w:1.50, d:0.88, h:0.74, color:'#3f3c46'});
-    var offs = [[-0.50, -0.66], [0.50, -0.66], [-0.50, 0.66], [0.50, 0.66]];
-    for (var ci = 0; ci < offs.length; ci++){
-      out.items.push({kind:'chair', cx:dx + offs[ci][0], cz:dz + offs[ci][1], rotY:0,
-                      w:0.42, d:0.42, h:0.45, color:'#4a4a4d'});
+    var dx = F(5.55), dz = 4.85;
+    out.items.push({kind:'table', cx:dx, cz:dz, rotY:0, w:0.90, d:1.50, h:0.74, color:'#3f3c46'});
+    var chs = [[F(6.20), 4.45,  Math.PI/2], [F(6.20), 5.25,  Math.PI/2],
+               [F(4.90), 4.45, -Math.PI/2], [F(4.90), 5.25, -Math.PI/2]];
+    for (var ci = 0; ci < chs.length; ci++){
+      out.items.push({kind:'chair', cx:chs[ci][0], cz:chs[ci][1], rotY:chs[ci][2],
+                      w:0.44, d:0.44, h:0.45, color:'#4a4a4d'});
     }
   }
+
+  /* ---- 침실1(안방) 출입구 : 문틀 · 열린 문짝 · 문턱 ---- */
+  var dZ0 = 3.15, dZ1 = 3.90, dT = 0.05;          // 아트월 북쪽 끝, 폭 0.75 m
+  out.items.push({kind:'doorFrame', x0:xArt - 0.02, x1:xArt + T + 0.02, z0:dZ0 - dT, z1:dZ0,
+                  y0:0, y1:2.10, color:'#f4eee3'});                                    // 남쪽 문틀
+  out.items.push({kind:'doorFrame', x0:xArt - 0.02, x1:xArt + T + 0.02, z0:dZ1, z1:dZ1 + dT,
+                  y0:0, y1:2.10, color:'#f4eee3'});                                    // 북쪽 문틀
+  out.items.push({kind:'threshold', x0:xArt - 0.02, x1:xArt + T + 0.02, z0:dZ0, z1:dZ1,
+                  y0:0, y1:0.016, color:'#b3a68e'});                                   // 문턱(위에서 봐도 뚫린 게 보이게)
+  out.items.push({kind:'doorLeaf', x0:xArt + T, x1:xArt + T + 0.72, z0:dZ0 + 0.01, z1:dZ0 + 0.05,
+                  y0:0.02, y1:2.02, color:'#c09a6b'});                                 // 열린 문짝(안방 안쪽으로 90°)
+  out.labels.push({x:xArt + 0.62, z:(dZ0 + dZ1) / 2, text:'안방 입구', size:0.36});
 
   /* ---- 침대 (침실1) ---- */
   if (s.bed){
@@ -872,8 +904,11 @@ function addItem(it){
   }
   if (it.kind === 'chair'){
     var ch = new THREE.Group();
-    ch.add(boxMesh(it.cx - it.w/2, it.cx + it.w/2, it.cz - it.d/2, it.cz + it.d/2, 0.40, 0.46, it.color));
-    ch.add(boxMesh(it.cx - it.w/2, it.cx + it.w/2, it.cz - it.d/2, it.cz - it.d/2 + 0.06, 0.46, 0.86, it.color));
+    var chw = it.w/2, chd = it.d/2;
+    ch.add(boxMesh(-chw, chw, -chd, chd, 0.40, 0.46, it.color));            // 좌판
+    ch.add(boxMesh(-chw, chw, -chd, -chd + 0.06, 0.46, 0.86, it.color));    // 등받이(-z 쪽)
+    ch.position.set(it.cx, 0, it.cz);
+    ch.rotation.y = it.rotY || 0;
     root.add(ch); return;
   }
   if (it.kind === 'soundbar' || it.kind === 'ps5' || it.kind === 'nightstand' || it.kind === 'projectorBody'){
