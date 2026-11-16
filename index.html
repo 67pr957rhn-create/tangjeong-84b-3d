@@ -79,7 +79,7 @@
 <div id="hud">
   <div class="card">
     <h1>탕정인피니티시티 1차 84B · 3D 인테리어</h1>
-    <div class="muted" id="subline">거실·TV·빔프 배치 시뮬레이터 (치수는 조정 가능)</div>
+    <div class="muted" id="subline">거실·TV·빔프 배치 시뮬레이터 · 105동 2901호(좌우 반전·주방확장·케어룸)</div>
     <div id="readout">
       <span>시청거리</span><b id="rdDist">-</b>
       <span>화면</span><b id="rdScreen">-</b>
@@ -145,7 +145,7 @@
 
   <h2>화면 방향</h2>
   <div class="grid" id="sides">
-    <button class="opt" data-side="art">아트월<small>동쪽 벽(타일)</small></button>
+    <button class="opt" data-side="art">아트월 TV<small>타일 마감 벽</small></button>
     <button class="opt" data-side="opp">반대벽<small>소파월(경량벽)</small></button>
   </div>
 
@@ -165,6 +165,7 @@
     <summary>확인치 / 추정치 구분해서 보기</summary>
     <div class="note">
       <b>확인된 사실</b><br>
+      · 105동 2901호는 분양 평면도와 좌우 대칭(반전) 세대 — 3D 공간·평면도 이미지 모두 좌우 반전 반영<br>
       · 전용 84.79㎡ (청약홈 입주자모집공고 2023-12-22 / 분양공고)<br>
       · 4베이 판상형, 알파룸·드레스룸·파우더룸·현관창고 구성 (분양 평면도 '확장형')<br>
       · 아트월은 창호와 직교하는 쪽 벽(거실 동측), 반대쪽(소파월)은 경량벽(가벽)<br>
@@ -174,6 +175,10 @@
       · 거실 4.05 × 4.05 m, 아트월 길이 4.05 m, 거실+주방 7.05 m<br>
       · 침실1 약 3.45 × 2.93 m, 침실2 약 2.70 × 3.05 m, 침실3 약 2.35 × 3.05 m<br>
       · 천장고 2.40 m (기본값, 슬라이더로 실측 입력)<br><br>
+      <b>짠부 님 세대 반영 (2026-11-16)</b><br>
+      · 좌우 반전: 침실1·발코니1·드레스룸·다용도실이 왼쪽, 현관·팬트리·케어룸·침실2·침실3이 오른쪽<br>
+      · 주방확장: 알파룸↔주방/식당 경계 벽 제거 → '주방/식당 (확장)' 하나로 통합, 아일랜드·식탁 배치<br>
+      · 공용욕실(욕실1) → 케어룸: 샤워부스·케어 벤치·안전손잡이 구성<br><br>
       ※ 29층 실측을 하셨다면 위 슬라이더 값만 고치면 전부 다시 계산됩니다.
     </div>
   </details>
@@ -275,6 +280,35 @@ function buildWall(list, fixed, a0, a1, t, h, horizontal, color, windows){
   return list;
 }
 
+/* 좌우 반전(거울) — 105동 2901호는 분양 평면도와 대칭 세대.
+   모든 기하는 x -> W - x, 회전은 부호 반전. 라벨·치수 텍스트는 위치만 옮긴다. */
+function mirrorLayout(o, W){
+  var i, t, x0, x1;
+  function mx(v){ return W - v; }
+  function swapX(t){ x0 = t.x0; x1 = t.x1; t.x0 = mx(x1); t.x1 = mx(x0); }
+  for (i = 0; i < o.rooms.length; i++) swapX(o.rooms[i]);
+  for (i = 0; i < o.walls.length; i++) swapX(o.walls[i]);
+  for (i = 0; i < o.glass.length; i++) swapX(o.glass[i]);
+  for (i = 0; i < o.mats.length; i++) swapX(o.mats[i]);
+  for (i = 0; i < o.items.length; i++){
+    t = o.items[i];
+    if (typeof t.cx === 'number'){
+      t.cx = mx(t.cx);
+      if (typeof t.rotY === 'number') t.rotY = -t.rotY;
+    } else if (typeof t.x0 === 'number'){
+      swapX(t);
+    }
+  }
+  for (i = 0; i < o.labels.length; i++) o.labels[i].x = mx(o.labels[i].x);
+  for (i = 0; i < o.dims.length; i++) swapX(o.dims[i]);
+  if (o.screen){ o.screen.x = mx(o.screen.x); o.screen.wallX = mx(o.screen.wallX); }
+  if (o.viewing){
+    o.viewing.seatFrontX = mx(o.viewing.seatFrontX);
+    o.viewing.sofaWallX = mx(o.viewing.sofaWallX);
+  }
+  return o;
+}
+
 function computeLayout(st){
   var s = {};
   for (var k in st) if (Object.prototype.hasOwnProperty.call(st, k)) s[k] = st[k];
@@ -298,24 +332,34 @@ function computeLayout(st){
     out.rooms.push({name:name, x0:x0, z0:z0, x1:x1, z1:z1, color:color});
     if (name) out.labels.push({x:(x0+x1)/2, z:(z0+z1)/2, text:name, size:(labelSize || 0.52)});
   }
-  var WOOD = '#d8c4a0', TILE = '#dedcd4', BALC = '#e6e4dd';
+  var WOOD = '#d8c4a0', TILE = '#dedcd4', BALC = '#e6e4dd', CAREFLOOR = '#cfd9da';
   room('침실2', 0, 0, BASE.xBed2, zB, WOOD);
   room('침실3', BASE.xBed3a, 0, BASE.xBed3b, zB, WOOD);
   room('거실', xLiv0, 0, xArt, zLiv, WOOD, 0.68);
   room('침실1', xEast - BASE.bed1W, BASE.bed1z0, xEast, BASE.bed1z1, WOOD);
   room('발코니1', xEast - BASE.bed1W + 0.10, 0, xEast - 1.55, BASE.bed1z0 - 0.05, BALC, 0.44);
   room('대피공간', xEast - 1.45, 0, xEast, BASE.bed1z0 - 0.05, BALC, 0.44);
-  room('주방/식당', xLiv0 + 1.35, zLiv + 0.05, xEast - 3.45, zN, WOOD, 0.62);
-  room('알파룸', xLiv0 - 1.00, zLiv + 0.10, xLiv0 + 1.30, zN, WOOD);
+  room('주방/식당 (확장)', xLiv0 - 1.00, zLiv + 0.05, xEast - 3.45, zN, WOOD, 0.52);  // 주방확장: 알파룸 통합
   room('현관', 0, zLiv + 0.05, 1.65, zLiv + 1.65, TILE, 0.46);
   room('현관창고', 0, zLiv + 1.80, 1.70, zN, TILE, 0.44);
   room('팬트리', 1.75, zLiv + 0.15, 2.70, zLiv + 1.65, TILE, 0.44);
-  room('욕실1', 2.80, zLiv + 0.15, xLiv0 - 1.10, zLiv + 1.65, TILE, 0.46);
+  room('케어룸', 2.80, zLiv + 0.15, xLiv0 - 1.10, zLiv + 1.65, CAREFLOOR, 0.46);  // 공용욕실 → 케어룸
   room('욕실2', xEast - 2.85, zLiv + 0.15, xEast - 1.55, zLiv + 1.60, TILE, 0.44);
   room('파우더룸', xEast - 1.45, zLiv + 0.20, xEast - 0.25, zLiv + 1.05, TILE, 0.40);
   room('드레스룸', xEast - 1.45, zLiv + 1.15, xEast, zN, TILE, 0.44);
   room('다용도실', xEast - 3.35, zLiv + 1.95, xEast - 1.55, zN, TILE, 0.42);
   room('', 0.10, zB + 0.05, xLiv0, zLiv - 0.02, WOOD);
+
+  /* ---- 케어룸 구성 (공용욕실 자리) ---- */
+  var crX0 = 2.80, crX1 = xLiv0 - 1.10, crZ0 = zLiv + 0.15, crZ1 = zLiv + 1.65;
+  out.items.push({kind:'showerArea', x0:crX0 + 0.10, x1:crX0 + 0.85, z0:crZ0 + 0.45, z1:crZ1 - 0.12,
+                  y0:0.008, y1:0.020, color:'#b3c5c8'});                            // 샤워부스 바닥
+  out.items.push({kind:'careBench', x0:crX1 - 0.52, x1:crX1 - 0.08, z0:crZ0 + 0.45, z1:crZ1 - 0.15,
+                  y0:0.40, y1:0.46, color:'#e8ebe9'});                               // 케어 벤치
+  out.items.push({kind:'grabBar', x0:crX1 - 0.12, x1:crX1 - 0.07, z0:crZ0 + 0.40, z1:crZ1 - 0.20,
+                  y0:0.84, y1:0.88, color:'#9aa4a7'});                               // 동쪽 벽 손잡이
+  out.items.push({kind:'grabBar', x0:crX0 + 0.12, x1:crX0 + 0.80, z0:crZ1 - 0.12, z1:crZ1 - 0.07,
+                  y0:0.84, y1:0.88, color:'#9aa4a7'});                               // 북쪽 벽 손잡이
 
   /* ---- 창호 ---- */
   var sWin = [
@@ -348,7 +392,7 @@ function computeLayout(st){
   buildWall(out.walls, zLiv + 0.15, 1.70, xLiv0 - 1.05, T, H, true, '#f4f1ea',
     [[xLiv0 - 2.05, xLiv0 - 1.30, 0, 2.05]]);                                   // 팬트리·욕실1 남벽(문)
   buildWall(out.walls, xLiv0 - 1.05, zLiv + 0.10, zN, T, H, false, '#f4f1ea', []);  // 알파룸 서벽
-  buildWall(out.walls, xLiv0 + 1.32, zLiv + 0.05, zN, T, H, false, '#f4f1ea', []);  // 알파룸|주방
+  // (주방확장) 알파룸↔주방/식당 경계 벽 제거 — 짠부 님 세대는 주방확장 시공
   buildWall(out.walls, zLiv + 1.70, xEast - 2.90, xEast - 0.20, T, H, true, '#f4f1ea',
     [[xEast - 1.40, xEast - 0.70, 0, 2.05]]);                                  // 욕실2·파우더룸 남벽
   buildWall(out.walls, xEast - 1.50, zLiv + 1.10, zN, T, H, false, '#f4f1ea', []);  // 드레스룸|다용도실
@@ -360,7 +404,7 @@ function computeLayout(st){
 
   /* ---- 매트 ---- */
   if (s.matLiving)  out.mats.push({x0:xLiv0 + 0.02, x1:xArt - 0.02, z0:0.03, z1:zLiv - 0.02, name:'거실'});
-  if (s.matKitchen) out.mats.push({x0:xLiv0 + 1.37, x1:xEast - 3.47, z0:zLiv + 0.06, z1:zN - 0.02, name:'주방'});
+  if (s.matKitchen) out.mats.push({x0:xLiv0 - 0.97, x1:xEast - 3.47, z0:zLiv + 0.06, z1:zN - 0.02, name:'주방'});
   if (s.matHall)    out.mats.push({x0:BASE.xBed2 + 0.12, x1:xLiv0, z0:zB + 0.06, z1:zLiv - 0.02, name:'복도'});
 
   /* ---- 화면 / 소파 ---- */
@@ -460,12 +504,21 @@ function computeLayout(st){
   // 시야각(수평)
   var hAngle = 2 * Math.atan((screenW / 2) / Math.max(0.5, dist)) * 180 / Math.PI;
 
-  /* ---- 식탁 ---- */
+  /* ---- 주방확장: 아일랜드 + 식탁 (알파룸과 통합된 공간) ---- */
+  var kx0 = xLiv0 - 1.00, kx1 = xEast - 3.45;
+  var islW = 2.10, islD = 0.95, islH = 0.90;
+  var islCx = kx1 - 0.70 - islW / 2;
+  var islCz = zN - 1.25;
+  out.items.push({kind:'island', x0:islCx - islW / 2, x1:islCx + islW / 2,
+                  z0:islCz - islD / 2, z1:islCz + islD / 2, y0:0, y1:islH, color:'#ded7ca'});
+  out.items.push({kind:'islandTop', x0:islCx - islW / 2 - 0.04, x1:islCx + islW / 2 + 0.04,
+                  z0:islCz - islD / 2 - 0.04, z1:islCz + islD / 2 + 0.04,
+                  y0:islH, y1:islH + 0.05, color:'#f3f0e8'});
   if (s.dining){
-    var dx = (xLiv0 + 1.35 + xEast - 3.45) / 2;
-    var dz = zLiv + 1.55;
+    var dx = kx0 + 1.30;
+    var dz = zLiv + 1.45;
     out.items.push({kind:'table', cx:dx, cz:dz, rotY:0, w:1.40, d:0.80, h:0.74, color:'#b98f63'});
-    var offs = [[-0.55, -0.62], [0.55, -0.62], [-0.55, 0.62], [0.55, 0.62]];
+    var offs = [[-0.52, -0.62], [0.52, -0.62], [-0.52, 0.62], [0.52, 0.62]];
     for (var ci = 0; ci < offs.length; ci++){
       out.items.push({kind:'chair', cx:dx + offs[ci][0], cz:dz + offs[ci][1], rotY:0,
                       w:0.42, d:0.42, h:0.45, color:'#8d7c68'});
@@ -505,6 +558,7 @@ function computeLayout(st){
     wallLen:zLiv, sofaW:s.sofaW, screenW:screenW, screenH:screenH,
     fits:fits, console:s.console, display:s.display
   };
+  mirrorLayout(out, xEast);   // 좌우 반전 반영
   return out;
 }
 
@@ -774,8 +828,9 @@ function rebuild(){
     loader.load(planSrc, function(tex){
       if ('colorSpace' in tex && THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
       tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-      tex.repeat.set((734 - 44) / 748, (515 - 100) / 536);
-      tex.offset.set(44 / 748, 1 - 515 / 536);
+      var rx = (734 - 44) / 748, ry = (515 - 100) / 536;
+      tex.repeat.set(-rx, ry);                 // 세대 좌우 반전 → 평면도 이미지도 좌우로 뒤집기
+      tex.offset.set(44 / 748 + rx, 1 - 515 / 536);
       var g = new THREE.PlaneGeometry(layout.xEast + 2 * layout.E, layout.zN + 2 * layout.E);
       var m = new THREE.MeshBasicMaterial({map:tex, transparent:true, opacity:0.55, side:THREE.DoubleSide});
       planMesh = new THREE.Mesh(g, m);
