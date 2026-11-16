@@ -516,28 +516,26 @@ function computeLayout(st){
   var islCx = kx1 - 0.70 - islW / 2;
   var islCz = zN - 1.25;
   out.items.push({kind:'island', x0:islCx - islW / 2, x1:islCx + islW / 2,
-                  z0:islCz - islD / 2, z1:islCz + islD / 2, y0:0, y1:islH, color:'#c3b8a6'});
+                  z0:islCz - islD / 2, z1:islCz + islD / 2, y0:0, y1:islH, color:'#bcb09c'});
   out.items.push({kind:'islandTop', x0:islCx - islW / 2 - 0.04, x1:islCx + islW / 2 + 0.04,
                   z0:islCz - islD / 2 - 0.04, z1:islCz + islD / 2 + 0.04,
                   y0:islH, y1:islH + 0.05, color:'#e2dccf'});
   // 주방 상·하부장 (더샵 84A 견본세대 배색: 상부장 화이트 / 하부장 샌드그레이 / 상판 엔지니어드스톤)
   var kcX = kx0 - 0.03;
   out.items.push({kind:'cabinetBase', x0:kcX, x1:kcX + 0.58, z0:zLiv + 0.40, z1:zN - 0.18,
-                  y0:0, y1:0.86, color:'#c1b6a4'});
+                  y0:0, y1:0.86, color:'#b8ab96'});
   out.items.push({kind:'cabinetTop', x0:kcX - 0.02, x1:kcX + 0.62, z0:zLiv + 0.36, z1:zN - 0.14,
-                  y0:0.86, y1:0.90, color:'#ded8cb'});
+                  y0:0.86, y1:0.90, color:'#e8e3d8'});
   out.items.push({kind:'cabinetUpper', x0:kcX, x1:kcX + 0.34, z0:zLiv + 0.44, z1:zN - 0.24,
                   y0:1.50, y1:2.28, color:'#f6f4ef'});
-  out.items.push({kind:'hood', x0:kcX, x1:kcX + 0.50, z0:zN - 1.35, z1:zN - 0.75,
-                  y0:1.62, y1:1.92, color:'#4a4642'});
   if (s.dining){
     var dx = kx0 + 1.55;
     var dz = zLiv + 1.45;
-    out.items.push({kind:'table', cx:dx, cz:dz, rotY:0, w:1.40, d:0.80, h:0.74, color:'#b98f63'});
+    out.items.push({kind:'table', cx:dx, cz:dz, rotY:0, w:1.40, d:0.80, h:0.74, color:'#3f3c46'});
     var offs = [[-0.52, -0.62], [0.52, -0.62], [-0.52, 0.62], [0.52, 0.62]];
     for (var ci = 0; ci < offs.length; ci++){
       out.items.push({kind:'chair', cx:dx + offs[ci][0], cz:dz + offs[ci][1], rotY:0,
-                      w:0.42, d:0.42, h:0.45, color:'#8d7c68'});
+                      w:0.42, d:0.42, h:0.45, color:'#4a4a4d'});
     }
   }
 
@@ -1192,11 +1190,11 @@ function initThree(){
   renderer.shadowMap.enabled = true;
   if (THREE.PCFSoftShadowMap) renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-  var hemi = new THREE.HemisphereLight(0xfff8ec, 0x8f8878, 1.25);
+  var hemi = new THREE.HemisphereLight(0xfff8ec, 0x8f8878, 1.10);
   scene.add(hemi);
-  var amb = new THREE.AmbientLight(0xfff6ea, 0.55);
+  var amb = new THREE.AmbientLight(0xfff6ea, 0.40);
   scene.add(amb);
-  var sun = new THREE.DirectionalLight(0xfff1da, 2.3);
+  var sun = new THREE.DirectionalLight(0xfff1da, 2.15);
   sun.position.set(14, 18, 16);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
