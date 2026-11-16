@@ -179,7 +179,11 @@
       · 좌우 반전: 침실1·발코니1·드레스룸·다용도실이 왼쪽, 현관·팬트리·케어룸·침실2·침실3이 오른쪽<br>
       · 주방확장: 알파룸↔주방/식당 경계 벽 제거 → '주방/식당 (확장)' 하나로 통합, 아일랜드·식탁 배치<br>
       · 공용욕실(욕실1) → 케어룸: 샤워부스·케어 벤치·안전손잡이 구성<br><br>
-      ※ 29층 실측을 하셨다면 위 슬라이더 값만 고치면 전부 다시 계산됩니다.
+      <b>마감재·색감 (더샵 84A 견본세대 기준, 2026-11-16 반영)</b><br>
+      · 마루: 강마루 'Life Oak'(사트데코 14-10946-118) / 아트월: 동평 YF272891 400×800 라임스톤 타일<br>
+      · 주방: 상부장 화이트 · 하부장 샌드그레이 · 상판 엔지니어드스톤(RU608 소피아) · 거실 LED 50W×3 + 간접조명 톤<br>
+      · ※ 공식 마감재리스트상 84B는 '미견립세대'(견본세대 없음)라, 같은 마감재가 적용된 84A MH 견본세대 사진을 기준으로 반영했습니다.<br><br>
+            ※ 29층 실측을 하셨다면 위 슬라이더 값만 고치면 전부 다시 계산됩니다.
     </div>
   </details>
 </div>
@@ -332,7 +336,8 @@ function computeLayout(st){
     out.rooms.push({name:name, x0:x0, z0:z0, x1:x1, z1:z1, color:color});
     if (name) out.labels.push({x:(x0+x1)/2, z:(z0+z1)/2, text:name, size:(labelSize || 0.52)});
   }
-  var WOOD = '#d8c4a0', TILE = '#dedcd4', BALC = '#e6e4dd', CAREFLOOR = '#cfd9da';
+  var WOOD = '#ded5c4', TILE = '#d7d2c7', BALC = '#e2ded3', CAREFLOOR = '#d2d3cd';
+  // 더샵 84A 견본세대 마감재: 강마루 'Life Oak', 바닥타일 오세아노 EN10260, 벽지 서울벽지 382-1
   room('침실2', 0, 0, BASE.xBed2, zB, WOOD);
   room('침실3', BASE.xBed3a, 0, BASE.xBed3b, zB, WOOD);
   room('거실', xLiv0, 0, xArt, zLiv, WOOD, 0.68);
@@ -374,10 +379,10 @@ function computeLayout(st){
   ];
 
   /* ---- 벽 ---- */
-  buildWall(out.walls, 0, -E, xEast + E, E, H, true, '#f1eee7', sWin);        // 남 외벽
-  buildWall(out.walls, zN, -E, xEast + E, E, H, true, '#f1eee7', nWin);       // 북 외벽
-  buildWall(out.walls, 0, -E, zN + E, E, H, false, '#f1eee7', [[zLiv + 0.55, zLiv + 1.45, 0, 2.10]]); // 서 외벽(현관 도어)
-  buildWall(out.walls, xEast, -E, zN + E, E, H, false, '#f1eee7', []);        // 동 외벽
+  buildWall(out.walls, 0, -E, xEast + E, E, H, true, '#f2efe8', sWin);        // 남 외벽
+  buildWall(out.walls, zN, -E, xEast + E, E, H, true, '#f2efe8', nWin);       // 북 외벽
+  buildWall(out.walls, 0, -E, zN + E, E, H, false, '#f2efe8', [[zLiv + 0.55, zLiv + 1.45, 0, 2.10]]); // 서 외벽(현관 도어)
+  buildWall(out.walls, xEast, -E, zN + E, E, H, false, '#f2efe8', []);        // 동 외벽
   buildWall(out.walls, BASE.xBed2 + T/2, -0.02, zB, T, H, false, '#f4f1ea', []);      // 침실2|침실3
   buildWall(out.walls, BASE.xBed3b + T/2, -0.02, zB, T, H, false, '#f4f1ea', []);     // 침실3|거실 (소파월)
   buildWall(out.walls, xArt + T/2, -0.02, Math.max(zLiv, BASE.bed1z1), T, H, false, '#f4f1ea', []); // 아트월
@@ -399,7 +404,8 @@ function computeLayout(st){
   buildWall(out.walls, zLiv + 1.90, xEast - 3.40, xEast - 1.55, T, H, true, '#f4f1ea', []); // 다용도실 남벽
 
   /* ---- 아트월 타일 마감(내부면) ---- */
-  out.walls.push({x0:xArt - 0.03, x1:xArt, z0:0.02, z1:zLiv, y0:0, y1:H, color:'#a09a8e', kind:'art'});
+  out.walls.push({x0:xArt - 0.03, x1:xArt, z0:0.02, z1:zLiv, y0:0, y1:H, color:'#c9c3b6', kind:'artTile'});
+  // 아트월: 동평 YF272891(400×800) 라임스톤 톤 타일
   out.walls.push({x0:xLiv0, x1:xLiv0 + 0.03, z0:0.02, z1:zLiv, y0:0, y1:H, color:'#efece4', kind:'sofaWall'});
 
   /* ---- 매트 ---- */
@@ -510,12 +516,22 @@ function computeLayout(st){
   var islCx = kx1 - 0.70 - islW / 2;
   var islCz = zN - 1.25;
   out.items.push({kind:'island', x0:islCx - islW / 2, x1:islCx + islW / 2,
-                  z0:islCz - islD / 2, z1:islCz + islD / 2, y0:0, y1:islH, color:'#ded7ca'});
+                  z0:islCz - islD / 2, z1:islCz + islD / 2, y0:0, y1:islH, color:'#c3b8a6'});
   out.items.push({kind:'islandTop', x0:islCx - islW / 2 - 0.04, x1:islCx + islW / 2 + 0.04,
                   z0:islCz - islD / 2 - 0.04, z1:islCz + islD / 2 + 0.04,
-                  y0:islH, y1:islH + 0.05, color:'#f3f0e8'});
+                  y0:islH, y1:islH + 0.05, color:'#e2dccf'});
+  // 주방 상·하부장 (더샵 84A 견본세대 배색: 상부장 화이트 / 하부장 샌드그레이 / 상판 엔지니어드스톤)
+  var kcX = kx0 - 0.03;
+  out.items.push({kind:'cabinetBase', x0:kcX, x1:kcX + 0.58, z0:zLiv + 0.40, z1:zN - 0.18,
+                  y0:0, y1:0.86, color:'#c1b6a4'});
+  out.items.push({kind:'cabinetTop', x0:kcX - 0.02, x1:kcX + 0.62, z0:zLiv + 0.36, z1:zN - 0.14,
+                  y0:0.86, y1:0.90, color:'#ded8cb'});
+  out.items.push({kind:'cabinetUpper', x0:kcX, x1:kcX + 0.34, z0:zLiv + 0.44, z1:zN - 0.24,
+                  y0:1.50, y1:2.28, color:'#f6f4ef'});
+  out.items.push({kind:'hood', x0:kcX, x1:kcX + 0.50, z0:zN - 1.35, z1:zN - 0.75,
+                  y0:1.62, y1:1.92, color:'#4a4642'});
   if (s.dining){
-    var dx = kx0 + 1.30;
+    var dx = kx0 + 1.55;
     var dz = zLiv + 1.45;
     out.items.push({kind:'table', cx:dx, cz:dz, rotY:0, w:1.40, d:0.80, h:0.74, color:'#b98f63'});
     var offs = [[-0.52, -0.62], [0.52, -0.62], [-0.52, 0.62], [0.52, 0.62]];
@@ -582,6 +598,58 @@ var mats = {};
 var camState = {target:{x:6.4, y:0.9, z:2.6}, theta:0.62, phi:0.86, radius:15.5};
 var THREE_OK = (typeof THREE !== 'undefined');
 
+/* ---- 실제 마감재 질감(캔버스 텍스처) ---- */
+var floorTexBase = null, tileTexBase = null;
+function makeFloorTex(){
+  if (floorTexBase) return floorTexBase;
+  var cv = document.createElement('canvas'); cv.width = 512; cv.height = 512;
+  var c = cv.getContext('2d');
+  c.fillStyle = '#ded5c4'; c.fillRect(0, 0, 512, 512);
+  // Life Oak 강마루: 1.2m × 0.19m 플랭크
+  var rows = 4, h = 512 / rows;
+  for (var r = 0; r < rows; r++){
+    var off = (r % 2) * 128;
+    for (var k = -1; k < 3; k++){
+      var x = k * 256 + off, y = r * h;
+      c.fillStyle = (r + k) % 3 === 0 ? '#dad1bf' : ((r + k) % 3 === 1 ? '#e2d9c8' : '#d9d0be');
+      c.fillRect(x + 1, y + 1, 254, h - 2);
+      c.strokeStyle = 'rgba(176,166,148,0.55)'; c.lineWidth = 1;
+      c.strokeRect(x + 0.5, y + 0.5, 255, h - 1);
+      // 나뭇결
+      c.strokeStyle = 'rgba(196,185,166,0.35)';
+      for (var g = 1; g < 5; g++){
+        c.beginPath(); c.moveTo(x + 6, y + g * (h / 5));
+        c.bezierCurveTo(x + 80, y + g * (h / 5) - 2, x + 170, y + g * (h / 5) + 2, x + 250, y + g * (h / 5));
+        c.stroke();
+      }
+    }
+  }
+  var t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  if ('colorSpace' in t && THREE.SRGBColorSpace) t.colorSpace = THREE.SRGBColorSpace;
+  floorTexBase = t; return t;
+}
+function makeTileTex(){
+  if (tileTexBase) return tileTexBase;
+  var cv = document.createElement('canvas'); cv.width = 256; cv.height = 512;
+  var c = cv.getContext('2d');
+  c.fillStyle = '#c9c3b6'; c.fillRect(0, 0, 256, 512);
+  // 라임스톤 느낌의 얼룩
+  for (var i = 0; i < 260; i++){
+    c.fillStyle = 'rgba(' + (188 + ((i * 37) % 34)) + ',' + (182 + ((i * 53) % 30)) + ',' + (168 + ((i * 29) % 28)) + ',0.35)';
+    var w = 6 + (i % 17), h = 4 + (i % 11);
+    c.fillRect((i * 71) % 256, (i * 113) % 512, w, h);
+  }
+  // 400×800 줄눈
+  c.strokeStyle = 'rgba(150,143,130,0.75)'; c.lineWidth = 3;
+  c.strokeRect(0, 0, 256, 512);
+  c.beginPath(); c.moveTo(0, 256); c.lineTo(256, 256); c.stroke();
+  var t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  if ('colorSpace' in t && THREE.SRGBColorSpace) t.colorSpace = THREE.SRGBColorSpace;
+  tileTexBase = t; return t;
+}
+
 function matFor(color, opts){
   var key = color + '|' + (opts && opts.kind ? opts.kind : '');
   if (mats[key]) return mats[key];
@@ -591,6 +659,11 @@ function matFor(color, opts){
         roughness:0.06, metalness:0, side:THREE.DoubleSide});
   } else if (opts && opts.kind === 'screen'){
     m = new THREE.MeshStandardMaterial({color:0x0b0d10, roughness:0.35, metalness:0.15});
+  } else if (opts && opts.kind === 'artTile'){
+    var tt = makeTileTex().clone();
+    tt.needsUpdate = true;
+    tt.repeat.set(10, 3);            // 400×800 타일: 4.05m 폭 10장 · 2.4m 높이 3장
+    m = new THREE.MeshStandardMaterial({map:tt, roughness:0.5, metalness:0.02});
   } else if (opts && opts.kind === 'floor'){
     m = new THREE.MeshStandardMaterial({color:new THREE.Color(color), roughness:0.85, metalness:0});
   } else {
@@ -768,7 +841,18 @@ function rebuild(){
   root.add(slab);
   for (i = 0; i < layout.rooms.length; i++){
     r = layout.rooms[i];
-    root.add(boxMesh(r.x0, r.x1, r.z0, r.z1, -0.005, 0.008, r.color, 'floor'));
+    if (r.color === '#ded5c4'){
+      var gm = new THREE.BoxGeometry(Math.max(0.001, r.x1 - r.x0), 0.013, Math.max(0.001, r.z1 - r.z0));
+      var tex = makeFloorTex().clone(); tex.needsUpdate = true;
+      tex.repeat.set((r.x1 - r.x0) / 1.2, (r.z1 - r.z0) / 0.19);
+      var mm2 = new THREE.MeshStandardMaterial({map:tex, roughness:0.5, metalness:0.01});
+      var mesh = new THREE.Mesh(gm, mm2);
+      mesh.position.set((r.x0 + r.x1) / 2, 0.0015, (r.z0 + r.z1) / 2);
+      mesh.receiveShadow = true;
+      root.add(mesh);
+    } else {
+      root.add(boxMesh(r.x0, r.x1, r.z0, r.z1, -0.005, 0.008, r.color, 'floor'));
+    }
   }
   // 매트
   for (i = 0; i < layout.mats.length; i++){
@@ -1095,7 +1179,7 @@ function onResize(){
 
 function initThree(){
   scene = new THREE.Scene();
-  scene.background = new THREE.Color('#dfe7ee');
+  scene.background = new THREE.Color('#e7e2d8');
   camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.05, 200);
   renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:false});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -1108,11 +1192,11 @@ function initThree(){
   renderer.shadowMap.enabled = true;
   if (THREE.PCFSoftShadowMap) renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-  var hemi = new THREE.HemisphereLight(0xffffff, 0x8a97a6, 1.5);
+  var hemi = new THREE.HemisphereLight(0xfff8ec, 0x8f8878, 1.25);
   scene.add(hemi);
-  var amb = new THREE.AmbientLight(0xffffff, 0.45);
+  var amb = new THREE.AmbientLight(0xfff6ea, 0.55);
   scene.add(amb);
-  var sun = new THREE.DirectionalLight(0xfff4e2, 2.4);
+  var sun = new THREE.DirectionalLight(0xfff1da, 2.3);
   sun.position.set(14, 18, 16);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
@@ -1122,7 +1206,7 @@ function initThree(){
     sun.shadow.camera.near = 0.5; sun.shadow.camera.far = 60;
   }
   scene.add(sun);
-  var fill = new THREE.DirectionalLight(0xdce8ff, 0.9);
+  var fill = new THREE.DirectionalLight(0xdfe8f6, 0.6);
   fill.position.set(-12, 10, -10);
   scene.add(fill);
 
