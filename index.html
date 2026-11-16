@@ -379,29 +379,29 @@ function computeLayout(st){
   ];
 
   /* ---- 벽 ---- */
-  buildWall(out.walls, 0, -E, xEast + E, E, H, true, '#f2efe8', sWin);        // 남 외벽
-  buildWall(out.walls, zN, -E, xEast + E, E, H, true, '#f2efe8', nWin);       // 북 외벽
-  buildWall(out.walls, 0, -E, zN + E, E, H, false, '#f2efe8', [[zLiv + 0.55, zLiv + 1.45, 0, 2.10]]); // 서 외벽(현관 도어)
-  buildWall(out.walls, xEast, -E, zN + E, E, H, false, '#f2efe8', []);        // 동 외벽
-  buildWall(out.walls, BASE.xBed2 + T/2, -0.02, zB, T, H, false, '#f4f1ea', []);      // 침실2|침실3
-  buildWall(out.walls, BASE.xBed3b + T/2, -0.02, zB, T, H, false, '#f4f1ea', []);     // 침실3|거실 (소파월)
-  buildWall(out.walls, xArt + T/2, -0.02, Math.max(zLiv, BASE.bed1z1), T, H, false, '#f4f1ea', []); // 아트월
-  buildWall(out.walls, zB, 0, BASE.xBed3b + T, T, H, true, '#f4f1ea',
+  buildWall(out.walls, 0, -E, xEast + E, E, H, true, '#ece7dd', sWin);        // 남 외벽
+  buildWall(out.walls, zN, -E, xEast + E, E, H, true, '#ece7dd', nWin);       // 북 외벽
+  buildWall(out.walls, 0, -E, zN + E, E, H, false, '#ece7dd', [[zLiv + 0.55, zLiv + 1.45, 0, 2.10]]); // 서 외벽(현관 도어)
+  buildWall(out.walls, xEast, -E, zN + E, E, H, false, '#ece7dd', []);        // 동 외벽
+  buildWall(out.walls, BASE.xBed2 + T/2, -0.02, zB, T, H, false, '#efeae1', []);      // 침실2|침실3
+  buildWall(out.walls, BASE.xBed3b + T/2, -0.02, zB, T, H, false, '#efeae1', []);     // 침실3|거실 (소파월)
+  buildWall(out.walls, xArt + T/2, -0.02, Math.max(zLiv, BASE.bed1z1), T, H, false, '#efeae1', []); // 아트월
+  buildWall(out.walls, zB, 0, BASE.xBed3b + T, T, H, true, '#efeae1',
     [[1.75, 2.55, 0, 2.05], [4.10, 4.90, 0, 2.05]]);                          // 침실2·3 북벽(문)
-  buildWall(out.walls, BASE.bed1z1, xArt + T, xEast, T, H, true, '#f4f1ea', [[xEast - 1.35, xEast - 0.55, 0, 2.05]]); // 침실1 북벽
-  buildWall(out.walls, 1.65, zLiv, zLiv + 1.65, T, H, false, '#f4f1ea', []);   // 현관|팬트리
-  buildWall(out.walls, 1.70, zLiv + 1.65, zN, T, H, false, '#f4f1ea', []);      // 현관창고 동벽
-  buildWall(out.walls, 2.72, zLiv + 0.10, zLiv + 1.65, T, H, false, '#f4f1ea', []); // 팬트리|욕실1
-  buildWall(out.walls, zLiv + 1.65, 0, xLiv0 - 1.05, T, H, true, '#f4f1ea',
+  buildWall(out.walls, BASE.bed1z1, xArt + T, xEast, T, H, true, '#efeae1', [[xEast - 1.35, xEast - 0.55, 0, 2.05]]); // 침실1 북벽
+  buildWall(out.walls, 1.65, zLiv, zLiv + 1.65, T, H, false, '#efeae1', []);   // 현관|팬트리
+  buildWall(out.walls, 1.70, zLiv + 1.65, zN, T, H, false, '#efeae1', []);      // 현관창고 동벽
+  buildWall(out.walls, 2.72, zLiv + 0.10, zLiv + 1.65, T, H, false, '#efeae1', []); // 팬트리|욕실1
+  buildWall(out.walls, zLiv + 1.65, 0, xLiv0 - 1.05, T, H, true, '#efeae1',
     [[1.05, 1.85, 0, 2.05]]);                                                  // 현관/욕실1 남벽
-  buildWall(out.walls, zLiv + 0.15, 1.70, xLiv0 - 1.05, T, H, true, '#f4f1ea',
+  buildWall(out.walls, zLiv + 0.15, 1.70, xLiv0 - 1.05, T, H, true, '#efeae1',
     [[xLiv0 - 2.05, xLiv0 - 1.30, 0, 2.05]]);                                   // 팬트리·욕실1 남벽(문)
-  buildWall(out.walls, xLiv0 - 1.05, zLiv + 0.10, zN, T, H, false, '#f4f1ea', []);  // 알파룸 서벽
+  buildWall(out.walls, xLiv0 - 1.05, zLiv + 0.10, zN, T, H, false, '#efeae1', []);  // 알파룸 서벽
   // (주방확장) 알파룸↔주방/식당 경계 벽 제거 — 짠부 님 세대는 주방확장 시공
-  buildWall(out.walls, zLiv + 1.70, xEast - 2.90, xEast - 0.20, T, H, true, '#f4f1ea',
+  buildWall(out.walls, zLiv + 1.70, xEast - 2.90, xEast - 0.20, T, H, true, '#efeae1',
     [[xEast - 1.40, xEast - 0.70, 0, 2.05]]);                                  // 욕실2·파우더룸 남벽
-  buildWall(out.walls, xEast - 1.50, zLiv + 1.10, zN, T, H, false, '#f4f1ea', []);  // 드레스룸|다용도실
-  buildWall(out.walls, zLiv + 1.90, xEast - 3.40, xEast - 1.55, T, H, true, '#f4f1ea', []); // 다용도실 남벽
+  buildWall(out.walls, xEast - 1.50, zLiv + 1.10, zN, T, H, false, '#efeae1', []);  // 드레스룸|다용도실
+  buildWall(out.walls, zLiv + 1.90, xEast - 3.40, xEast - 1.55, T, H, true, '#efeae1', []); // 다용도실 남벽
 
   /* ---- 아트월 타일 마감(내부면) ---- */
   out.walls.push({x0:xArt - 0.03, x1:xArt, z0:0.02, z1:zLiv, y0:0, y1:H, color:'#c9c3b6', kind:'artTile'});
@@ -602,19 +602,19 @@ function makeFloorTex(){
   if (floorTexBase) return floorTexBase;
   var cv = document.createElement('canvas'); cv.width = 512; cv.height = 512;
   var c = cv.getContext('2d');
-  c.fillStyle = '#ded5c4'; c.fillRect(0, 0, 512, 512);
+  c.fillStyle = '#d5c8b1'; c.fillRect(0, 0, 512, 512);
   // Life Oak 강마루: 1.2m × 0.19m 플랭크
   var rows = 4, h = 512 / rows;
   for (var r = 0; r < rows; r++){
     var off = (r % 2) * 128;
     for (var k = -1; k < 3; k++){
       var x = k * 256 + off, y = r * h;
-      c.fillStyle = (r + k) % 3 === 0 ? '#dad1bf' : ((r + k) % 3 === 1 ? '#e2d9c8' : '#d9d0be');
+      c.fillStyle = (r + k) % 3 === 0 ? '#d0c3ac' : ((r + k) % 3 === 1 ? '#dbcfb9' : '#d3c6af');
       c.fillRect(x + 1, y + 1, 254, h - 2);
-      c.strokeStyle = 'rgba(176,166,148,0.55)'; c.lineWidth = 1;
+      c.strokeStyle = 'rgba(163,150,128,0.6)'; c.lineWidth = 1;
       c.strokeRect(x + 0.5, y + 0.5, 255, h - 1);
       // 나뭇결
-      c.strokeStyle = 'rgba(196,185,166,0.35)';
+      c.strokeStyle = 'rgba(184,170,146,0.4)';
       for (var g = 1; g < 5; g++){
         c.beginPath(); c.moveTo(x + 6, y + g * (h / 5));
         c.bezierCurveTo(x + 80, y + g * (h / 5) - 2, x + 170, y + g * (h / 5) + 2, x + 250, y + g * (h / 5));
